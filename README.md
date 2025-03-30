@@ -20,10 +20,9 @@ Simply find your device and look for the number next to `Bus xxx Device`, removi
 
 <details>
     <summary>📷 Click here to view an example.</summary>
+    <img src="./assets/lsusb.jpg">
 
-    ![](assets/lsusb.jpg) 
-
-    In my case the device number was 34. (remember to remove any leading 0)
+    In my case, the device number was 34. (Remember to remove any leading zeros)
 </details>
 
 ### 2️⃣ Step
