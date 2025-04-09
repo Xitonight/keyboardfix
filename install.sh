@@ -2,18 +2,31 @@
 
 set -e
 
-DEVICE_NUMBER="$1"
+if [ -z "$1" ]; then
+  lsusb | sed -E 's/Bus [0-9]+ |ID [a-f0-9:]+ //g'
+
+  read -r -p "Enter the number of the device you want to fix: " DEVICE_NUMBER
+fi
+
+DEVICE_NUMBER=$((10#$DEVICE_NUMBER))
+
+if [[ ! $DEVICE_NUMBER =~ ^[0-9]+$ ]]; then
+  echo "Error: Please enter a valid number"
+  exit 1
+fi
 
 for dev in /sys/bus/usb/devices/*; do
   if [[ ! "$dev" =~ ":" ]]; then
     if grep -q "$DEVICE_NUMBER" "$dev"/devnum; then
       DEVICE_PATH=$dev
-    else
-      "Error: There's no device with number $DEVICE_NUMBER"
-      exit 1
     fi
   fi
 done
+
+if [ -z "$DEVICE_PATH" ]; then
+  echo "Error: There's no device with number $DEVICE_NUMBER"
+  exit 1
+fi
 
 DEVICE_NAME="$(cat "$DEVICE_PATH"/product)"
 
@@ -32,8 +45,7 @@ WantedBy=suspend.target
 EOF
 )
 
-# Now you can use the $service_content variable
-echo "$SERVICE_CONTENT" | sudo tee /etc/systemd/system/reset-usb.service
+echo "$SERVICE_CONTENT" | sudo tee /etc/systemd/system/reset-usb.service >/dev/null
 
 sudo systemctl daemon-reload
 sudo systemctl enable reset-usb.service

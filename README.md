@@ -12,11 +12,12 @@ I solved this simply doing a manual reset of the authorization from the kernel t
 
 ## 📦 Installation
 
-### 1️⃣ Step 
+**You can run the script in two ways**, either **pass the number of your device** to the script, which you find running `lsusb` or **run it without any parameters**, it'll do the same thing under the hood, but it will strip the output to be a little more readable. 
 
-You'll have to pass to the script the number of your device, and you'll find that using `lsusb` (in case you don't have this command available just install `usbutils`).
+> [!WARNING]
+> In any case you'll need to install `usbutils`.
 
-Simply find your device and look for the number next to `Bus xxx Device`, removing any leading 0.
+If you're doing this manually, simply find your device and look for the number next to `Bus xxx Device`, removing any leading 0.
 
 <details>
     <summary>📷 Click here to view an example.</summary>
@@ -25,28 +26,28 @@ Simply find your device and look for the number next to `Bus xxx Device`, removi
     In my case, the device number was 34. (Remember to remove any leading zeros)
 </details>
 
-### 2️⃣ Step
-
-You can run the script in two ways.
-- Fetch it with curl and pipe it to bash
+Now curl the script and pipe it to bash:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Xitonight/keyboardfix/main/install.sh | bash -s -- <your_device_number>
+curl -fsSL https://raw.githubusercontent.com/Xitonight/keyboardfix/main/install.sh | bash -s -- your_device_number
 ```
 
-- Clone the repo locally and run it
+> [!NOTE]
+> Remember to remove `-- your_device_number` if you don't know your devce number
+
+Or, alternatively, clone the repo locally and run it:
 
 ```bash
 git clone https://github.com/Xitonight/keyboardfix && cd keyboardfix
 chmod +x ./install.sh
-./install.sh <your_device_number>
+./install.sh your_device_number
 ```
 
 ## ❌ Uninstalling 
 
-Run these commands
+Run these commands:
 
 ```bash
-sudo rm /etc/systemd/system/reset-usb.service
+sudo rm -rf /etc/systemd/system/reset-usb.service
 sudo systemctl daemon-reload
 ```
